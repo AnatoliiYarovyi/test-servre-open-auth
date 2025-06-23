@@ -6,6 +6,7 @@ import { trimTrailingSlash } from "hono/trailing-slash";
 import { issuerHandler } from "./auth";
 import { MailService } from "./mailer";
 
+const PORT = process.env.PORT;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 export const mailService: MailService | null = RESEND_API_KEY
 	? new MailService(RESEND_API_KEY)
@@ -34,7 +35,7 @@ export const mailService: MailService | null = RESEND_API_KEY
 		serve(
 			{
 				fetch: app.fetch,
-				port: 8787,
+				port: Number(PORT) || 3000,
 			},
 			(info) => {
 				console.log("up and running on", info.port);
