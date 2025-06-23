@@ -1,0 +1,19 @@
+{
+	"scripts": {
+		"typecheck": "tsc --noEmit",
+		"dev": "pnpm run typecheck && tsx watch src/index.ts",
+		"build": "esbuild ./src/index.ts --bundle --platform=node --target=node22 --outfile=./dist/index.js",
+		"start": "node ./dist/index.js"
+	},
+	"dependencies": {
+		"@hono/node-server": "^1.14.4",
+		"@openauthjs/openauth": "^0.4.3",
+		"hono": "^4.8.2",
+		"valibot": "^1.1.0"
+	},
+	"devDependencies": {
+		"@types/node": "^24.0.3",
+		"esbuild": "^0.25.5",
+		"tsx": "^4.20.3"
+	}
+}

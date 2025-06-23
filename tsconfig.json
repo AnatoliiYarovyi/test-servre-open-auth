@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "skipLibCheck": true,
+        "lib": [
+            "ESNext"
+        ],
+        "jsx": "react-jsx",
+        "jsxImportSource": "hono/jsx",
+        "outDir": "./dist",
+        "sourceMap": true,
+        "inlineSources": true,
+        "sourceRoot": "/"
+    },
+    "include": ["./src", "./scripts"],
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node"
+    }
+}
