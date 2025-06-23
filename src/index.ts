@@ -5,8 +5,9 @@ import { logger } from "hono/logger";
 import { trimTrailingSlash } from "hono/trailing-slash";
 import { issuerHandler } from "./auth";
 import { MailService } from "./mailer";
+import { authMiddleware } from "./authMiddleware";
 
-const PORT = process.env.PORT;
+const PORT = Number(process.env.PORT) || 3000;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 export const mailService: MailService | null = RESEND_API_KEY
 	? new MailService(RESEND_API_KEY)
@@ -27,6 +28,10 @@ export const mailService: MailService | null = RESEND_API_KEY
 
 		app.route("/", issuerHandler);
 
+		app.get("/protect", authMiddleware, (c) => {
+			return c.text("Hello!");
+		});
+
 		app.onError((err, c) => {
 			console.error("Error:", err);
 			return c.json({ message: "Internal Server Error" }, 500);
@@ -35,7 +40,7 @@ export const mailService: MailService | null = RESEND_API_KEY
 		serve(
 			{
 				fetch: app.fetch,
-				port: Number(PORT) || 3000,
+				port: PORT,
 			},
 			(info) => {
 				console.log("up and running on", info.port);
