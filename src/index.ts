@@ -24,16 +24,22 @@ export const mailService: MailService | null = RESEND_API_KEY
 			return c.text("Hello!");
 		});
 
-		app.route("/auth", issuerHandler);
+		app.route("/", issuerHandler);
 
 		app.onError((err, c) => {
 			console.error("Error:", err);
 			return c.json({ message: "Internal Server Error" }, 500);
 		});
 
-		serve(app, (info) => {
-			console.log("up and running on", info.port);
-		});
+		serve(
+			{
+				fetch: app.fetch,
+				port: 8787,
+			},
+			(info) => {
+				console.log("up and running on", info.port);
+			},
+		);
 	} catch (e) {
 		console.log("ERROR", e);
 
