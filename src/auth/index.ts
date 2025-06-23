@@ -4,6 +4,8 @@ import { CodeProvider } from "@openauthjs/openauth/provider/code";
 import { MemoryStorage } from "@openauthjs/openauth/storage/memory";
 import { subjects } from "./subjects";
 
+import { mailService } from "../index";
+
 async function getUser(email: string) {
 	// Get user from database and return user ID
 	return "123";
@@ -16,6 +18,7 @@ const issuerHandler = issuer({
 		code: CodeProvider(
 			CodeUI({
 				sendCode: async (email, code) => {
+					mailService?.sendOtp(email.email, code);
 					console.log(email, code);
 				},
 			}),

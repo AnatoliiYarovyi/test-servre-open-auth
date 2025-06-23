@@ -4,6 +4,12 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { trimTrailingSlash } from "hono/trailing-slash";
 import { issuerHandler } from "./auth";
+import { MailService } from "./mailer";
+
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+export const mailService: MailService | null = RESEND_API_KEY
+	? new MailService(RESEND_API_KEY)
+	: null;
 
 (async () => {
 	try {
