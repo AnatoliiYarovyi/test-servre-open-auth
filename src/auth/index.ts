@@ -7,7 +7,7 @@ import { subjects } from "./subjects";
 import { mailService } from "../index";
 
 async function getUser(email: string) {
-	// Get user from database and return user ID
+	// Get user from  database and return user ID
 	return "123";
 }
 
