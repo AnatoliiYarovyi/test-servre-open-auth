@@ -12,18 +12,24 @@ import { mailService } from "../index";
 const PORT = Number(process.env.PORT) || 3000;
 
 const openauthClient = createClient({
-	clientID: "my-client",
+	clientID: "nextjs", // process.env.CLIENT_ID || "nextjs-client",
 	issuer: process.env.ISSUER_URL || `http://localhost:${PORT}`, // url to the OpenAuth server
 });
 
 async function getUser(email: string) {
+	// check if user exists in database
+	// if not, create a new user in the database
+	// For simplicity, we are returning a static user ID here.
+
 	// Get user from  database and return user ID
 	return "123";
 }
 
 const issuerHandler = issuer({
 	subjects,
-	storage: MemoryStorage(),
+	storage: MemoryStorage({
+		persist: "./persist.json",
+	}),
 	providers: {
 		code: CodeProvider(
 			CodeUI({
@@ -44,6 +50,11 @@ const issuerHandler = issuer({
 					await mailService?.sendOtp(email, code);
 					console.log(email, code);
 				},
+				validatePassword: (password) => {
+					if (password.length < 8) {
+						return "Password must be at least 8 characters";
+					}
+				},
 			}),
 		),
 	},
@@ -56,11 +67,57 @@ const issuerHandler = issuer({
 			});
 		}
 		if (value.provider === "github") {
-			console.log("value.clientID: ", value.clientID);
-			console.log("value.provider: ", value.provider);
+			console.log("value: ", JSON.stringify(value));
+			/* {
+				"provider":"github",
+				"clientID":"Ov23liWrDMRAKeFuNHjG",
+				"tokenset":{
+					"access":"gho_04Rrx___MM2",
+					"raw":{
+						"access_token":"gho_04Rrx___MM2",
+						"token_type":"bearer",
+						"scope":"user:email"
+					}
+				}
+			} */
+			const emailResponse = await fetch(
+				"https://api.github.com/user/emails",
+				{
+					headers: {
+						authorization: `Bearer ${value.tokenset.raw.access_token}`,
+						Accept: "application/vnd.github.v3+json",
+						"user-agent": "fetch",
+					},
+				},
+			);
+
+			if (!emailResponse.ok) {
+				throw new Error(
+					`Failed to fetch user emails from GitHub: ${await emailResponse.text()}`,
+				);
+			}
+
+			type GithubEmailResponse = Email[];
+			interface Email {
+				email: string;
+				primary: boolean;
+				verified: boolean;
+				visibility?: string;
+			}
+
+			const emails =
+				(await emailResponse.json()) as GithubEmailResponse;
+
+			const primaryEmail = emails.find(
+				(email) => email.primary && email.verified,
+			);
+			if (!primaryEmail) {
+				throw new Error("Primary email not found");
+			}
+			console.log("Primary email: ", primaryEmail.email);
 
 			return ctx.subject("user", {
-				id: await getUser(value.clientID),
+				id: await getUser(primaryEmail.email),
 			});
 		}
 		if (value.provider === "password") {
