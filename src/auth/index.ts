@@ -11,6 +11,7 @@ import { mailService } from "../index";
 import { SQLiteStorage } from "./adapter/index";
 
 const PORT = Number(process.env.PORT) || 3000;
+const VOLUME = process.env.VOLUME_RAILWAY || ".";
 
 const openauthClient = createClient({
 	clientID: "nextjs", // process.env.CLIENT_ID || "nextjs-client",
@@ -28,8 +29,7 @@ async function getUser(email: string) {
 
 const issuerHandler = issuer({
 	subjects,
-	// storage: SQLiteStorage("/volume/openauth.db"),
-	storage: MemoryStorage(),
+	storage: SQLiteStorage(`${VOLUME}/openauth.db`),
 	providers: {
 		code: CodeProvider(
 			CodeUI({
