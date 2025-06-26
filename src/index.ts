@@ -22,7 +22,12 @@ export const mailService: MailService | null = RESEND_API_KEY
 
 		app.use("*")
 			.use(logger())
-			.use(cors({ origin: "*" }))
+			.use(
+				cors({
+					origin: "*",
+					allowMethods: ["GET", "POST", "PUT", "DELETE"],
+				}),
+			)
 			.use(trimTrailingSlash());
 
 		app.route("/", issuerHandler);
@@ -33,6 +38,8 @@ export const mailService: MailService | null = RESEND_API_KEY
 			return c.text("Hello!");
 		});
 		app.get("/api/callback", async (c) => {
+			console.log("Callback received");
+
 			const code = c.req.query("code");
 
 			if (!code) {
