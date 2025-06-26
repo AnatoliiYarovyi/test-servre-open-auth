@@ -90,7 +90,7 @@ export const mailService: MailService | null = RESEND_API_KEY
 			return c.text("Hello!");
 		});
 		app.get("/protect", authMiddleware, (c) => {
-			return c.text("Hello!");
+			return c.json({ message: "Protected route accessed!" }, 200);
 		});
 
 		app.onError((err, c) => {
