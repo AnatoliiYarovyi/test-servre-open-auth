@@ -55,7 +55,7 @@ export const mailService: MailService | null = RESEND_API_KEY
 				httpOnly: true,
 				maxAge: 34560000,
 				sameSite: "None", // "Strict",
-				domain: ".ngrok-free.app",
+				// domain: ".ngrok-free.app",
 				// path: "/",
 				// expires: new Date(
 				// 	Date.UTC(2000, 11, 24, 10, 30, 59, 900),
@@ -66,7 +66,7 @@ export const mailService: MailService | null = RESEND_API_KEY
 				httpOnly: true,
 				maxAge: 34560000,
 				sameSite: "None", // "Strict",
-				domain: ".ngrok-free.app",
+				// domain: ".ngrok-free.app",
 				// path: "/",
 				// expires: new Date(
 				// 	Date.UTC(2000, 11, 24, 10, 30, 59, 900),
