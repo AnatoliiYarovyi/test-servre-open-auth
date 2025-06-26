@@ -8,6 +8,7 @@ import { PasswordUI } from "@openauthjs/openauth/ui/password";
 import { createClient } from "@openauthjs/openauth/client";
 import { subjects } from "./subjects";
 import { mailService } from "../index";
+import { SQLiteStorage } from "./adapter/index";
 
 const PORT = Number(process.env.PORT) || 3000;
 
@@ -27,14 +28,15 @@ async function getUser(email: string) {
 
 const issuerHandler = issuer({
 	subjects,
-	storage: MemoryStorage({
-		persist: "./persist.json",
-	}),
+	storage: SQLiteStorage(".storage.db"),
+	// storage: MemoryStorage({
+	// 	persist: "./persist.json",
+	// }),
 	providers: {
 		code: CodeProvider(
 			CodeUI({
 				sendCode: async (email, code) => {
-					await mailService?.sendOtp(email.email, code);
+					// await mailService?.sendOtp(email.email, code);
 					console.log(email, code);
 				},
 			}),
