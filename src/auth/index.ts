@@ -36,7 +36,7 @@ const issuerHandler = issuer({
 		code: CodeProvider(
 			CodeUI({
 				sendCode: async (email, code) => {
-					// await mailService?.sendOtp(email.email, code);
+					await mailService?.sendOtp(email.email, code);
 					console.log(email, code);
 				},
 			}),
