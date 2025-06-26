@@ -28,7 +28,7 @@ async function getUser(email: string) {
 
 const issuerHandler = issuer({
 	subjects,
-	storage: SQLiteStorage(":memory:"),
+	storage: SQLiteStorage("/volume/openauth.db"),
 	// storage: MemoryStorage({
 	// 	persist: "./persist.json",
 	// }),
