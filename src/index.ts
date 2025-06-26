@@ -39,12 +39,14 @@ export const mailService: MailService | null = RESEND_API_KEY
 				return c.json({ message: "No code provided" }, 400);
 			}
 
-			const exchanged = await openauthClient.exchange(
-				code,
-				`${BACKEND_URL}/api/callback`,
-			);
+			const link = `${BACKEND_URL}/api/callback`;
+			console.log("link", link);
+
+			const exchanged = await openauthClient.exchange(code, link);
 
 			if (exchanged.err) {
+				console.log("Error exchanging code:", exchanged);
+
 				return c.json(exchanged.err, 400);
 			}
 
