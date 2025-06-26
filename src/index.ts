@@ -26,6 +26,7 @@ export const mailService: MailService | null = RESEND_API_KEY
 				cors({
 					origin: "*",
 					allowMethods: ["GET", "POST", "PUT", "DELETE"],
+					credentials: true,
 				}),
 			)
 			.use(trimTrailingSlash());
