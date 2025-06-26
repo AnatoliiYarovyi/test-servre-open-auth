@@ -4,7 +4,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { trimTrailingSlash } from "hono/trailing-slash";
 import { issuerHandler, openauthClient } from "./auth";
-import { MailService } from "./mailer";
+import { MailService } from "./mailService";
 import { authMiddleware } from "./authMiddleware";
 import { setCookie } from "hono/cookie";
 
