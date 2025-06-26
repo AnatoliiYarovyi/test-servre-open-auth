@@ -28,7 +28,7 @@ async function getUser(email: string) {
 
 const issuerHandler = issuer({
 	subjects,
-	storage: SQLiteStorage(".storage.db"),
+	storage: SQLiteStorage(":memory:"),
 	// storage: MemoryStorage({
 	// 	persist: "./persist.json",
 	// }),
