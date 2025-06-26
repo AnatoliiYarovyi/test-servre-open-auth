@@ -24,7 +24,13 @@ export const mailService: MailService | null = RESEND_API_KEY
 			.use(logger())
 			.use(
 				cors({
-					origin: "*",
+					origin: [
+						"*",
+						FRONTEND_URL!,
+						"http://localhost:3000",
+						"http://localhost:5173",
+						"https://svelte-openauth.vercel.app",
+					],
 					allowMethods: ["GET", "POST", "PUT", "DELETE"],
 					credentials: true,
 				}),
