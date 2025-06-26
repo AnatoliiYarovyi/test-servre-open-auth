@@ -34,6 +34,7 @@ export const mailService: MailService | null = RESEND_API_KEY
 			console.log("Callback received");
 
 			const code = c.req.query("code");
+			console.log("Authorization code:", code);
 
 			if (!code) {
 				return c.json({ message: "No code provided" }, 400);
