@@ -30,13 +30,6 @@ export const mailService: MailService | null = RESEND_API_KEY
 			)
 			.use(trimTrailingSlash());
 
-		app.route("/", issuerHandler);
-		app.get("/health", (c) => {
-			return c.text("Hello!");
-		});
-		app.get("/protect", authMiddleware, (c) => {
-			return c.text("Hello!");
-		});
 		app.get("/api/callback", async (c) => {
 			console.log("Callback received");
 
@@ -81,6 +74,13 @@ export const mailService: MailService | null = RESEND_API_KEY
 			});
 
 			return c.redirect(FRONTEND_URL!);
+		});
+		app.route("/", issuerHandler);
+		app.get("/health", (c) => {
+			return c.text("Hello!");
+		});
+		app.get("/protect", authMiddleware, (c) => {
+			return c.text("Hello!");
 		});
 
 		app.onError((err, c) => {

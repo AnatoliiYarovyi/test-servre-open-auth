@@ -14,7 +14,7 @@ const PORT = Number(process.env.PORT) || 3000;
 
 const openauthClient = createClient({
 	clientID: "nextjs", // process.env.CLIENT_ID || "nextjs-client",
-	issuer: process.env.ISSUER_URL || `http://localhost:${PORT}`, // url to the OpenAuth server
+	issuer: process.env.BACKEND_URL, // || `http://localhost:${PORT}`, // url to the OpenAuth server
 });
 
 async function getUser(email: string) {
