@@ -93,8 +93,16 @@ export const mailService: MailService | null = RESEND_API_KEY
 			return c.json({ message: "Protected route accessed!" }, 200);
 		});
 		app.get("/logout", (c) => {
-			deleteCookie(c, "access_token");
-			deleteCookie(c, "refresh_token");
+			deleteCookie(c, "access_token", {
+				secure: true,
+				httpOnly: true,
+				sameSite: "None",
+			});
+			deleteCookie(c, "refresh_token", {
+				secure: true,
+				httpOnly: true,
+				sameSite: "None",
+			});
 			return c.json({ message: "Logged out successfully" }, 200);
 		});
 
