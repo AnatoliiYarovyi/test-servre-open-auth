@@ -6,7 +6,7 @@ import { trimTrailingSlash } from "hono/trailing-slash";
 import { issuerHandler, openauthClient } from "./auth";
 import { MailService } from "./mailService";
 import { authMiddleware } from "./authMiddleware";
-import { setCookie } from "hono/cookie";
+import { deleteCookie, setCookie } from "hono/cookie";
 
 const PORT = Number(process.env.PORT) || 3000;
 const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`;
@@ -91,6 +91,11 @@ export const mailService: MailService | null = RESEND_API_KEY
 		});
 		app.get("/protect", authMiddleware, (c) => {
 			return c.json({ message: "Protected route accessed!" }, 200);
+		});
+		app.get("/logout", (c) => {
+			deleteCookie(c, "access_token");
+			deleteCookie(c, "refresh_token");
+			return c.json({ message: "Logged out successfully" }, 200);
 		});
 
 		app.onError((err, c) => {
