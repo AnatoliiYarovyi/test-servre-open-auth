@@ -4,6 +4,7 @@ import { CodeProvider } from "@openauthjs/openauth/provider/code";
 import { MemoryStorage } from "@openauthjs/openauth/storage/memory";
 import { GithubProvider } from "@openauthjs/openauth/provider/github";
 import { PasswordProvider } from "@openauthjs/openauth/provider/password";
+import { GoogleProvider } from "@openauthjs/openauth/provider/google";
 import { PasswordUI } from "@openauthjs/openauth/ui/password";
 import { createClient } from "@openauthjs/openauth/client";
 import { subjects } from "./subjects";
@@ -34,7 +35,7 @@ const issuerHandler = issuer({
 		code: CodeProvider(
 			CodeUI({
 				sendCode: async (email, code) => {
-					await mailService?.sendOtp(email.email, code);
+					// await mailService?.sendOtp(email.email, code);
 					console.log(email, code);
 				},
 			}),
@@ -43,6 +44,11 @@ const issuerHandler = issuer({
 			clientID: process.env.GITHUB_CLIENT_ID!,
 			clientSecret: process.env.GITHUB_CLIENT_SECRET!,
 			scopes: ["user:email"],
+		}),
+		google: GoogleProvider({
+			clientID: process.env.GOOGLE_CLIENT_ID!,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+			scopes: ["email"],
 		}),
 		password: PasswordProvider(
 			PasswordUI({
@@ -118,6 +124,19 @@ const issuerHandler = issuer({
 
 			return ctx.subject("user", {
 				id: await getUser(primaryEmail.email),
+			});
+		}
+		if (value.provider === "google") {
+			console.log("value: ", JSON.stringify(value, null, 2));
+
+			const email = value.tokenset.raw?.claims?.email;
+			console.log("Google email: ", email);
+
+			if (!email) {
+				throw new Error("Email not found in Google claims");
+			}
+			return ctx.subject("user", {
+				id: await getUser(email),
 			});
 		}
 		if (value.provider === "password") {
