@@ -129,7 +129,34 @@ const issuerHandler = issuer({
 		if (value.provider === "google") {
 			console.log("value: ", JSON.stringify(value, null, 2));
 
-			const email = value.tokenset.raw?.claims?.email;
+			type IUserInfoDataGoogle = {
+				id: string;
+				email: string;
+				verified_email: boolean;
+				name: string;
+				given_name: string;
+				family_name: string;
+				picture: string;
+				locale: string;
+			};
+
+			const userInfo = await fetch(
+				"https://www.googleapis.com/userinfo/v2/me",
+				{
+					headers: {
+						authorization: `Bearer ${value.tokenset.raw.access_token}`,
+					},
+				},
+			);
+			if (!userInfo.ok) {
+				throw new Error(
+					`Failed to fetch user emails from GitHub: ${await userInfo.text()}`,
+				);
+			}
+			const userData =
+				(await userInfo.json()) as IUserInfoDataGoogle;
+
+			const email = userData.email;
 			console.log("Google email: ", email);
 
 			if (!email) {
