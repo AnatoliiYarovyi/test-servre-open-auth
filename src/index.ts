@@ -40,7 +40,7 @@ export const mailService: MailService | null = RESEND_API_KEY
 		app.post("/test-cookie", async (c) => {
 			const test_value = "test_value";
 
-			setCookie(c, "test_cookie", `${test_value}`, {
+			setCookie(c, "test_cookie", test_value, {
 				secure: true,
 				httpOnly: true,
 				maxAge: 3600, // 1 hour
